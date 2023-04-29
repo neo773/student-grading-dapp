@@ -6,6 +6,24 @@ Result Dapp is a decentralized grading system built on blockchain technology. It
 
 The core functionality of Result Dapp relies on the efficient and secure storage of student records. To achieve this, the system employs Merkle root trees and stores the actual data off-chain in IPFS.
 
+
+## Screenshots
+
+<img width="1439" alt="Screenshot 2023-04-30 at 2 01 49 AM" src="https://user-images.githubusercontent.com/62795688/235323055-4444ad37-f681-48aa-bbf0-7f17f1bd137a.png">
+
+<img width="1439" alt="Screenshot 2023-04-30 at 2 02 34 AM" src="https://user-images.githubusercontent.com/62795688/235323100-d81cf7fe-0a71-4fb3-a70d-e08975d59ae8.png">
+
+![image](https://user-images.githubusercontent.com/62795688/235323222-286020bc-9b85-4922-8246-f0e3f74604d4.png)
+
+<img width="1439" alt="Screenshot 2023-04-30 at 2 04 45 AM" src="https://user-images.githubusercontent.com/62795688/235323341-1083d81c-6ecc-459f-aada-73a8403523d8.png">
+
+
+![image](https://user-images.githubusercontent.com/62795688/235323248-78846307-d121-48dc-b264-ef3429b13f3c.png)
+
+<img width="1439" alt="Screenshot 2023-04-30 at 2 09 09 AM" src="https://user-images.githubusercontent.com/62795688/235323320-7daefe1e-9b8d-4569-be75-652244fe396d.png">
+
+
+
 ## Features 🚀
 
 - **Super Admin:** The super admin has the authority to add or delete new admins.
