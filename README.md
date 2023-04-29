@@ -6,6 +6,11 @@ Result Dapp is a decentralized grading system built on blockchain technology. It
 
 The core functionality of Result Dapp relies on the efficient and secure storage of student records. To achieve this, the system employs Merkle root trees and stores the actual data off-chain in IPFS.
 
+## Demo
+
+
+https://user-images.githubusercontent.com/62795688/235324376-3627efa2-05bd-4fa2-bd67-33c8a14bf6b3.mp4
+
 
 ## Screenshots
 
