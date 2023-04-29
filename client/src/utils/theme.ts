@@ -1,0 +1,521 @@
+import { StepsStyleConfig } from "chakra-ui-steps"
+import { darken } from "@chakra-ui/theme-tools"
+import type { CSSObject } from "@chakra-ui/react"
+import type { DeepPartial } from "ts-essentials"
+import type { ChakraStylesConfig } from "chakra-react-select"
+
+
+export type SelectOption = {
+    // UI-facing option label
+    label: string
+    // Field entry matching criteria as well as select output
+    value: string
+}
+
+type CSSObjectWithActiveStep = CSSObject & { _activeStep: CSSObject }
+
+const StepsTheme: typeof StepsStyleConfig = {
+    ...StepsStyleConfig,
+    baseStyle: (props: any) => {
+        return {
+            ...StepsStyleConfig.baseStyle(props),
+            connector: {
+                ...StepsStyleConfig.baseStyle(props).connector,
+                borderColor: "white",
+            },
+            label: {
+                ...StepsStyleConfig.baseStyle(props).label,
+                color: "textColor",
+            },
+            stepIconContainer: {
+                ...StepsStyleConfig.baseStyle(props).stepIconContainer,
+                bg: "#121b2f8c",
+                borderColor: "#3880a1",
+                _activeStep: {
+                    ...(StepsStyleConfig.baseStyle(props).stepIconContainer! as CSSObjectWithActiveStep)._activeStep,
+                    borderColor: "var(--chakra-colors-green-500)",
+                    bg: "#38a16947"
+                },
+            },
+        }
+    },
+}
+
+const MatchIconTheme: any = {
+    baseStyle: (props: any) => {
+        return {
+            ...StepsStyleConfig.baseStyle(props).stepIconContainer,
+            borderWidth: "2px",
+            bg: "#ffffff0f",
+            borderColor: "yellow.500",
+            color: "background",
+            transitionDuration: "ultra-fast",
+        }
+    },
+    defaultProps: {
+        size: "md",
+        colorScheme: "green",
+    },
+}
+
+export const themeOverrides = {
+    colors: {
+        textColor: "#fff",
+        subtitleColor: "#718096",
+        inactiveColor: "#A0AEC0",
+        border: "#ffffff47",
+        background: "#000000a6",
+        backgroundAlpha: "#0000",
+        secondaryBackground: "#EDF2F7",
+        highlight: "#E2E8F0",
+        rsi: {
+            50: "#E6E6FF",
+            100: "#C4C6FF",
+            200: "#A2A5FC",
+            300: "#8888FC",
+            400: "#7069FA",
+            500: "#5D55FA",
+            600: "#4D3DF7",
+            700: "#3525E6",
+            800: "#1D0EBE",
+            900: "#0C008C",
+        },
+    },
+    shadows: {
+        outline: 0,
+    },
+    components: {
+        UploadStep: {
+            baseStyle: {
+                heading: {
+                    fontSize: "3xl",
+                    color: "textColor",
+                    mb: "2rem",
+                },
+                title: {
+                    fontSize: "2xl",
+                    lineHeight: 8,
+                    fontWeight: "semibold",
+                    color: "textColor",
+                },
+                subtitle: {
+                    fontSize: "md",
+                    lineHeight: 6,
+                    color: "subtitleColor",
+                    mb: "1rem",
+                },
+                tableWrapper: {
+                    mb: "0.5rem",
+                    position: "relative",
+                    h: "72px",
+                },
+                dropzoneText: {
+                    size: "lg",
+                    lineHeight: 7,
+                    fontWeight: "semibold",
+                    color: "textColor",
+                },
+                dropZoneBorder: "rgb(14 165 233)",
+                dropzoneButton: {
+                    background: 'rgb(14 165 233)',
+                    // _hover: 'rgb(56 189 248)',
+                    mt: "1rem",
+                },
+            },
+        },
+        SelectSheetStep: {
+            baseStyle: {
+                heading: {
+                    color: "textColor",
+                    mb: 8,
+                    fontSize: "3xl",
+                },
+                radio: {},
+                radioLabel: {
+                    color: "textColor",
+                },
+            },
+        },
+        SelectHeaderStep: {
+            baseStyle: {
+                heading: {
+                    color: "textColor",
+                    mb: 8,
+                    fontSize: "3xl",
+                },
+            },
+        },
+        MatchColumnsStep: {
+            baseStyle: {
+                heading: {
+                    color: "textColor",
+                    mb: 8,
+                    fontSize: "3xl",
+                },
+                title: {
+                    color: "textColor",
+                    fontSize: "2xl",
+                    lineHeight: 8,
+                    fontWeight: "semibold",
+                    mb: 4,
+                },
+                userTable: {
+                    header: {
+                        fontSize: "xs",
+                        lineHeight: 4,
+                        fontWeight: "bold",
+                        letterSpacing: "wider",
+                        color: "textColor",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        ["&[data-ignored]"]: {
+                            color: "inactiveColor",
+                        },
+                    },
+                    cell: {
+                        fontSize: "sm",
+                        lineHeight: 5,
+                        fontWeight: "medium",
+                        color: "textColor",
+                        px: 6,
+                        py: 4,
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        ["&[data-ignored]"]: {
+                            color: "inactiveColor",
+                        },
+                    },
+                    ignoreButton: {
+                        size: "xs",
+                        backgroundColor: "#4faef24d",
+                        // colorScheme: "gray",
+                        color: "white",
+                    },
+                },
+                selectColumn: {
+                    text: {
+                        fontSize: "sm",
+                        lineHeight: 5,
+                        fontWeight: "normal",
+                        color: "inactiveColor",
+                        px: 4,
+                    },
+                    accordionLabel: {
+                        color: "blue.600",
+                        fontSize: "sm",
+                        lineHeight: 5,
+                        pl: 1,
+                    },
+                    selectLabel: {
+                        pt: "0.375rem",
+                        pb: 2,
+                        fontSize: "md",
+                        lineHeight: 6,
+                        fontWeight: "medium",
+                        color: "textColor",
+                    },
+                },
+                select: {
+                    dropdownIndicator: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        border: "none",
+                        p: 0,
+                        w: "40px",
+                        color: "textColor",
+                    }),
+                    control: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        borderRadius: "6px",
+                    borderColor: "#ffffff40",
+                        p: 0,
+                        // _focus, _hover, _invalid, _readonly pseudoselectors can be used here for alternate border colors
+                        _focus: undefined,
+                    }),
+                    input: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        border: "none",
+                        p: 0,
+                    }),
+                    indicatorSeparator: (provided) => ({
+                        ...provided,
+                        opacity: 0,
+                    }),
+                    singleValue: (provided) => ({
+                        ...provided,
+                        ml: 0,
+                        mr: 0,
+                    }),
+                    placeholder: (provided) => ({
+                        ...provided,
+                        color: "inactiveColor",
+                    }),
+                    valueContainer: (provided) => ({
+                        ...provided,
+                        color: "textColor",
+                    }),
+                    menu: (provided) => ({
+                        ...provided,
+                        p: 0,
+                        mt: 0,
+                    }),
+                    menuList: (provided) => ({
+                        ...provided,
+                        bg: "background",
+                        minW: "initial",
+                    }),
+                    option: (provided, state) => ({
+                        ...provided,
+                        color: "textColor",
+                        bg: state.isSelected || state.isFocused ? "highlight" : provided.bg,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "block",
+                        whiteSpace: "nowrap",
+                        _hover: {
+                            bg: "highlight",
+                        },
+                    }),
+                } as ChakraStylesConfig<SelectOption>,
+            },
+        },
+        ValidationStep: {
+            baseStyle: {
+                heading: {
+                    color: "textColor",
+                    fontSize: "3xl",
+                },
+                select: {
+                    dropdownIndicator: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        border: "none",
+                        p: 0,
+                        w: "40px",
+                    }),
+                    control: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        border: "none",
+                        p: 0,
+                        _focus: undefined,
+                    }),
+                    input: (provided) => ({
+                        ...provided,
+                        background: "none",
+                        border: "none",
+                        p: 0,
+                    }),
+                    indicatorSeparator: (provided) => ({
+                        ...provided,
+                        opacity: 0,
+                    }),
+                    singleValue: (provided) => ({
+                        ...provided,
+                        marginInlineStart: 0,
+                    }),
+                    valueContainer: (provided) => ({
+                        ...provided,
+                        p: 0,
+                        paddingInlineStart: 2,
+                        color: "gray.400",
+                    }),
+                    menu: (provided) => ({
+                        ...provided,
+                        p: 0,
+                        mt: 0,
+                    }),
+                    menuList: (provided) => ({
+                        ...provided,
+                        minW: "initial",
+                    }),
+                    option: (provided, state) => ({
+                        ...provided,
+                        color: state.isSelected ? "gray.900" : provided.color,
+                        bg: state.isSelected || state.isFocused ? "secondaryBackground" : provided.bg,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "block",
+                        whiteSpace: "nowrap",
+                    }),
+                } as ChakraStylesConfig<SelectOption>,
+            },
+        },
+        MatchIcon: MatchIconTheme,
+        Steps: StepsTheme,
+        Modal: {
+            baseStyle: {
+                dialog: {
+                    borderRadius: "lg",
+                    bg: "transparent",
+                    fontSize: "lg",
+                    color: "textColor",
+                    backdropFilter: "blur(20px)"
+                },
+            },
+            variants: {
+                rsi: {
+                    header: {
+                        bg: "#29395f8c",
+                        px: "2rem",
+                        py: "1.5rem",
+                    },
+                    body: {
+                        bg: "#161e318c",
+                        display: "flex",
+                        paddingX: "2rem",
+                        paddingY: "2rem",
+                        flexDirection: "column",
+                        flex: 1,
+                        overflow: "auto",
+                        height: "100%",
+                    },
+                    footer: {
+                        bg: "#29395f8c",
+                        py: "1.5rem",
+                        justifyContent: "center",
+                    },
+                    dialog: {
+                        outline: "unset",
+                        minH: "calc(100vh - 4rem)",
+                        maxW: "calc(100vw - 4rem)",
+                        my: "2rem",
+                        borderRadius: "3xl",
+                        overflow: "hidden",
+                    },
+                },
+            },
+        },
+        Button: {
+            defaultProps: {
+                colorScheme: "rsi",
+            },
+        },
+    },
+    styles: {
+        global: {
+            ".rdg": {
+                contain: "size layout style paint",
+                borderRadius: "lg",
+                border: "none",
+                borderTop: "1px solid var(--rdg-border-color)",
+                blockSize: "100%",
+
+                // we have to use vars here because chakra does not autotransform unknown props
+                "--rdg-row-height": "35px",
+                "--rdg-color": "var(--chakra-colors-textColor)",
+                "--rdg-background-color": "transparent",
+                "--rdg-header-background-color": "#0000",
+                "--rdg-row-hover-background-color": "var(--chakra-colors-background)",
+                "--rdg-selection-color": "var(--chakra-colors-blue-400)",
+                "--rdg-row-selected-background-color": "var(--chakra-colors-rsi-50)",
+                "--row-selected-hover-background-color": "var(--chakra-colors-rsi-100)",
+                "--rdg-error-cell-background-color": "var(--chakra-colors-red-50)",
+                "--rdg-warning-cell-background-color": "var(--chakra-colors-orange-50)",
+                "--rdg-info-cell-background-color": "var(--chakra-colors-blue-50)",
+                "--rdg-border-color": "#ffffff40",
+                "--rdg-frozen-cell-box-shadow": "none",
+                "--rdg-font-size": "var(--chakra-fontSizes-sm)",
+            },
+            ".rdg-header-row .rdg-cell": {
+                color: "textColor",
+                fontSize: "xs",
+                lineHeight: 10,
+                fontWeight: "bold",
+                letterSpacing: "wider",
+                textTransform: "uppercase",
+                "&:first-of-type": {
+                    borderTopLeftRadius: "lg",
+                },
+                "&:last-child": {
+                    borderTopRightRadius: "lg",
+                },
+            },
+            ".rdg-row:last-child .rdg-cell:first-of-type": {
+                borderBottomLeftRadius: "lg",
+            },
+            ".rdg-row:last-child .rdg-cell:last-child": {
+                borderBottomRightRadius: "lg",
+            },
+            ".rdg[dir='rtl']": {
+                ".rdg-row:last-child .rdg-cell:first-of-type": {
+                    borderBottomRightRadius: "lg",
+                    borderBottomLeftRadius: "none",
+                },
+                ".rdg-row:last-child .rdg-cell:last-child": {
+                    borderBottomLeftRadius: "lg",
+                    borderBottomRightRadius: "none",
+                },
+            },
+            ".rdg-cell": {
+                contain: "size layout style paint",
+                borderRight: "none",
+                borderInlineEnd: "none",
+                borderBottom: "1px solid var(--rdg-border-color)",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                backgroundColor: "#00000014",
+                "&[aria-selected='true']": {
+                    boxShadow: "inset 0 0 0 1px var(--rdg-selection-color)",
+                },
+                "&:first-of-type": {
+                    borderInlineStart: "1px solid var(--rdg-border-color)",
+                },
+                "&:last-child": {
+                    borderInlineEnd: "1px solid var(--rdg-border-color)",
+                },
+            },
+            ".rdg-cell-error": {
+                backgroundColor: "var(--rdg-error-cell-background-color)",
+            },
+            ".rdg-cell-warning": {
+                backgroundColor: "var(--rdg-warning-cell-background-color)",
+            },
+            ".rdg-cell-info": {
+                backgroundColor: "var(--rdg-info-cell-background-color)",
+            },
+            ".rdg-static": {
+                cursor: "pointer",
+            },
+            ".rdg-static .rdg-header-row": {
+                display: "none",
+            },
+            ".rdg-static .rdg-cell": {
+                "--rdg-selection-color": "none",
+            },
+            ".rdg-example .rdg-cell": {
+                "--rdg-selection-color": "none",
+                borderBottom: "none",
+            },
+
+            ".rdg-radio": {
+                display: "flex",
+                alignItems: "center",
+            },
+            ".rdg-checkbox": {
+                "--rdg-selection-color": "none",
+                display: "flex",
+                alignItems: "center",
+            },
+        },
+    },
+} as const
+
+export const rtlThemeSupport = {
+    components: {
+        Modal: {
+            baseStyle: {
+                dialog: {
+                    direction: "rtl",
+                },
+            },
+        },
+    },
+} as const
+
+export type CustomTheme = DeepPartial<typeof themeOverrides>

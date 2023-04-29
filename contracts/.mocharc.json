@@ -1,0 +1,7 @@
+{
+    "extensions": ["ts"],
+    "spec": "test/**/*.test.{js,ts}",
+    "node-option": [
+      "loader=ts-node/register/transpile-only"
+    ]
+  }

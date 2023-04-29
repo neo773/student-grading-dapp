@@ -1,0 +1,3 @@
+-r ts-node/register/transpile-only
+--timeout 50000
+tests/**/*.test.{js,ts}
