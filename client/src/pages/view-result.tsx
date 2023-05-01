@@ -250,7 +250,10 @@ const ViewResults = () => {
                               (batch) =>
                                 batch.batchId === activeFormData.batchId
                             )
-                            .map((batch, batchIndex) => {
+                            .map((batch) => {
+                              const batchLocation = state.batchList.findIndex(
+                                (item) => item.batchId === batch.batchId
+                              )
                               return batch.data.map((record, recordIndex) => (
                                 <tr key={recordIndex}>
                                   <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
@@ -280,7 +283,7 @@ const ViewResults = () => {
                                     <div className="flex gap-5">
                                       <button
                                         onClick={() =>
-                                          viewResult(record, batchIndex)
+                                          viewResult(record, batchLocation)
                                         }
                                         className="flex justify-center gap-1 items-center bg-sky-500 hover:bg-sky-600 text-white transition all ease-in-out 300 rounded-lg py-3 w-[130px]"
                                       >
@@ -289,7 +292,10 @@ const ViewResults = () => {
                                       </button>
                                       <button
                                         onClick={() =>
-                                          deleteRecord(recordIndex, batchIndex)
+                                          deleteRecord(
+                                            recordIndex,
+                                            batchLocation
+                                          )
                                         }
                                         className="flex justify-center gap-1 items-center bg-red-500 hover:bg-red-600 text-white transition all ease-in-out 300 rounded-lg py-3 w-[130px]"
                                       >
