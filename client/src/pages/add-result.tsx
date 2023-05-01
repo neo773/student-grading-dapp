@@ -4,7 +4,7 @@ import { FieldValues, useForm } from "react-hook-form"
 import Select from "../components/Select/Select"
 import syllabus from "../data/syllabus"
 import { useImmer } from "use-immer"
-import useContract from "../hooks/useContract"
+import useContract, { useContractEthers } from "../hooks/useContract"
 import { generateBatchMerkleTree } from "../utils/utils"
 import { useStoreState } from "../store/store"
 import { BatchResponse } from "../../../contracts/contract-types/web3/ResultDapp"
@@ -73,6 +73,11 @@ const AddResult = () => {
   const formData = watch()
 
   const contract = useContract(
+    "MainContract",
+    process.env.NEXT_PUBLIC_MAIN_CONTRACT_ADDRESS
+  )
+
+  const contractEthers = useContractEthers(
     "MainContract",
     process.env.NEXT_PUBLIC_MAIN_CONTRACT_ADDRESS
   )
@@ -150,13 +155,13 @@ const AddResult = () => {
         const batchTree = generateBatchMerkleTree(studentsData)
         const batchRoot = batchTree.getHexRoot()
 
-        const response = await contract.methods
-          .addBatch(newBatchId, batchRoot, file.cid.toString())
-          .send({
-            from: storeState.walletAddress,
-          })
+        const response = await contractEthers.addBatch(
+          newBatchId,
+          batchRoot,
+          file.cid.toString()
+        )
 
-        const txid = `https://testnet.bscscan.com/tx/${response.transactionHash}`
+        const txid = `https://testnet.bscscan.com/tx/${response.hash}`
         showModal(false, "Success!", "Batch successfully added", true, txid)
 
         updateState((state) => {
@@ -182,13 +187,13 @@ const AddResult = () => {
       const batchTree = generateBatchMerkleTree(currentData)
       const batchRoot = batchTree.getHexRoot()
 
-      const response = await contract.methods
-        .editBatch(currentBatchId, batchRoot, file.cid.toString())
-        .send({
-          from: storeState.walletAddress,
-        })
+      const response = await contractEthers.editBatch(
+        currentBatchId,
+        batchRoot,
+        file.cid.toString()
+      )
 
-      const txid = `https://testnet.bscscan.com/tx/${response.transactionHash}`
+      const txid = `https://testnet.bscscan.com/tx/${response.hash}`
       showModal(false, "Success!", "Batch successfully edited", true, txid)
 
       updateState((state) => {

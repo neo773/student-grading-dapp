@@ -8,18 +8,23 @@ import { ResultBatch } from "../types/types"
 import { printDocument } from "../utils/utils"
 import Result from "../components/Result/Result"
 import Modal from "../components/Modal/Modal"
+import { batch } from "./view-result"
 
 interface State {
-  rollNumber: null | string
-  allRecords: ResultBatch[]
-  myRecord: ResultBatch | null
-  submitted: boolean
+  modalData: {
+    data: ResultBatch | null
+    metaData: batch | null
+  }
+  showResultModal: boolean
   showModal: boolean
+  modalError: boolean
+  submitted: boolean
+  title: string | null
+  description: string | null
   modalShowAction: boolean
-  modalActionLink: null | string
-  modalError: null | boolean
-  title: null | string
-  description: null | string
+  modalActionLink: string | null
+  batchList: batch[]
+  rollNumber: string | null
 }
 
 const checkResult = () => {
@@ -31,42 +36,54 @@ const checkResult = () => {
   )
 
   const [state, updateState] = useImmer<State>({
+    modalData: {
+      data: null,
+      metaData: null,
+    },
     rollNumber: null,
-    allRecords: [],
-    myRecord: null,
     submitted: false,
     showModal: false,
     modalShowAction: false,
     modalActionLink: null,
-    modalError: null,
+    showResultModal: false,
+    modalError: false,
     title: null,
     description: null,
+    batchList: [],
   })
 
   const getMarks = async () => {
     const rollNumber = state.rollNumber
-    const filtered = state.allRecords.filter(
-      (record) => record.roll === rollNumber
-    )
-    updateState((state) => {
-      if (typeof filtered[0] !== "undefined") {
-        state.myRecord = filtered[0]
+
+    const result = {} as State["modalData"]
+
+    const resultCheck = state.batchList.some((batch) => {
+      const data = batch.data.find((record) => record.roll === rollNumber)
+      if (typeof data !== "undefined") {
+        result.data = data
+        result.metaData = batch
+        return true
       }
     })
-    if (filtered.length === 0) {
-      showModal(true, "Error!", "Result not found", false, null)
-    } else {
-      updateState((state) => {
-        state.submitted = true
-      })
+
+    if (!resultCheck) {
+      return showModal(true, "Error!", "Result not found", false, null)
     }
+
+    updateState((state) => {
+      state.modalData = {
+        data: result.data,
+        metaData: result.metaData,
+      }
+      state.showResultModal = true
+      state.submitted = true
+    })
   }
 
   const resetForm = () => {
     updateState((state) => {
       state.submitted = false
       state.rollNumber = null
-      state.myRecord = null
     })
   }
 
@@ -74,15 +91,22 @@ const checkResult = () => {
     try {
       const data = await contract.methods.getAllBatches().call()
 
+      updateState((state) => {
+        state.batchList = []
+      })
+
       data.map(async (item) => {
         const file = await readFIle<ResultBatch[]>(item.IPFSHash)
-        updateState((state) => {
-          if (typeof file === "undefined") return
-          for (const fileData of file) {
-            state.allRecords.push(fileData)
-          }
-        })
-        console.log(state.allRecords)
+        if (typeof file !== "undefined") {
+          updateState((state) => {
+            state.batchList.push({
+              batchId: item.batchId,
+              IPFSHash: item.IPFSHash,
+              merkleRootTree: item.studentRecordsRoot,
+              data: file,
+            })
+          })
+        }
       })
     } catch (error) {
       console.log(error)
@@ -153,12 +177,17 @@ const checkResult = () => {
         </div>
       </div>
 
-      {state.myRecord !== null && (
+      {state.submitted && (
         <Result
-          isOpen={state.submitted}
-          data={state.myRecord}
+          key={state.modalData?.data?.roll}
+          isOpen={state.showResultModal}
+          modalData={{
+            data: state.modalData.data!,
+            metaData: state.modalData.metaData!,
+          }}
           closeModal={(value: boolean) => {
             updateState((state) => {
+              state.showResultModal = value
               state.submitted = value
             })
           }}
