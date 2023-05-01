@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import useIPFS from "../hooks/useIPFS"
-import useContract from "../hooks/useContract"
+import useContract, { useContractEthers } from "../hooks/useContract"
 import { useImmer } from "use-immer"
 import { createDraft, finishDraft } from "immer"
 import { ResultBatch } from "../types/types"
 import { useStoreState } from "../store/store"
-import Result from "../components/Result/Result"
+import Result, { ModalProps } from "../components/Result/Result"
 import Modal from "../components/Modal"
 import { Delete, InfoCircle } from "react-iconly"
 import { generateBatchMerkleTree } from "../utils/utils"
@@ -13,8 +13,18 @@ import Select from "../components/Select"
 import { FieldValues, useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 
+export type batch = {
+  batchId: string
+  IPFSHash: string
+  data: ResultBatch[]
+  merkleRootTree: string
+}
+
 interface State {
-  modalData: ResultBatch | null
+  modalData: {
+    data: ResultBatch
+    metaData: batch
+  } | null
   showResultModal: boolean
   showModal: boolean
   modalError: boolean
@@ -22,12 +32,7 @@ interface State {
   description: string | null
   modalShowAction: boolean
   modalActionLink: string | null
-  batchList: {
-    batchId: string
-    IPFSHash: string
-    data: ResultBatch[]
-    merkleRootTree: string
-  }[]
+  batchList: batch[]
 }
 
 type Form = FieldValues & {
@@ -60,6 +65,11 @@ const ViewResults = () => {
     process.env.NEXT_PUBLIC_MAIN_CONTRACT_ADDRESS
   )
 
+  const contractEthers = useContractEthers(
+    "MainContract",
+    process.env.NEXT_PUBLIC_MAIN_CONTRACT_ADDRESS
+  )
+
   const { readFIle, uploadFile } = useIPFS()
 
   const activeFormData = watch()
@@ -83,9 +93,13 @@ const ViewResults = () => {
     })
   }
 
-  const viewResult = (data: ResultBatch) => {
+  const viewResult = (data: ResultBatch, batchIndex: number) => {
+    const batch = state.batchList[batchIndex]!
     updateState((state) => {
-      state.modalData = data
+      state.modalData = {
+        data: data,
+        metaData: batch,
+      }
       state.showResultModal = true
     })
   }
@@ -95,7 +109,6 @@ const ViewResults = () => {
       const batch = createDraft<State["batchList"][0]>(
         state.batchList[batchIndex]!
       )
-      console.log(batchIndex, batch.batchId)
 
       batch.data.splice(recordIndex, 1)
 
@@ -107,13 +120,13 @@ const ViewResults = () => {
 
       const newFile = await uploadFile(JSON.stringify(final.data))
 
-      const response = await contract.methods
-        .editBatch(final.batchId, batchRoot, newFile.cid.toString())
-        .send({
-          from: storeState.walletAddress,
-        })
+      const response = await contractEthers.editBatch(
+        final.batchId,
+        batchRoot,
+        newFile.cid.toString()
+      )
 
-      const txid = `https://testnet.bscscan.com/tx/${response.transactionHash}`
+      const txid = `https://testnet.bscscan.com/tx/${response.hash}`
 
       showModal(false, "Success!", "Record successfully deleted", true, txid)
 
@@ -147,7 +160,6 @@ const ViewResults = () => {
           })
         }
       })
-      console.log(state.batchList)
     } catch (error) {
       console.log(error)
     }
@@ -267,7 +279,9 @@ const ViewResults = () => {
                                   <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400 text-center">
                                     <div className="flex gap-5">
                                       <button
-                                        onClick={() => viewResult(record)}
+                                        onClick={() =>
+                                          viewResult(record, batchIndex)
+                                        }
                                         className="flex justify-center gap-1 items-center bg-sky-500 hover:bg-sky-600 text-white transition all ease-in-out 300 rounded-lg py-3 w-[130px]"
                                       >
                                         <InfoCircle size={20} />
@@ -312,8 +326,12 @@ const ViewResults = () => {
       />
       {state.modalData !== null && (
         <Result
+          key={state.modalData.data.roll}
           isOpen={state.showResultModal}
-          data={state.modalData}
+          modalData={{
+            data: state.modalData.data,
+            metaData: state.modalData.metaData,
+          }}
           closeModal={(value: boolean) => {
             updateState((state) => {
               state.showResultModal = value

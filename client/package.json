@@ -33,6 +33,7 @@
     "big.js": "^6.2.1",
     "bignumber.js": "^9.0.2",
     "clsx": "^1.2.1",
+    "copy-text-to-clipboard": "^3.1.0",
     "daisyui": "^2.51.5",
     "dayjs": "^1.11.5",
     "easy-peasy": "^5.1.0",
