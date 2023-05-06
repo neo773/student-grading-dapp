@@ -3,7 +3,7 @@ import { procedure, router } from "../trpc"
 import { TRPCError } from "@trpc/server"
 import { createTransport } from "nodemailer"
 import { MailOptions } from "nodemailer/lib/json-transport"
-import {validateEmail} from 'email-domain-validator'
+import { validate } from "email-validator"
 
 export const appRouter = router({
   signup: procedure
@@ -15,7 +15,7 @@ export const appRouter = router({
     )
     .mutation(async ({ input }) => {
       try {
-        const isValid = validateEmail(input.emailAddress)
+        const isValid = validate(input.emailAddress)
 
         if (!isValid) {
           return {
@@ -47,7 +47,6 @@ export const appRouter = router({
           status: "success",
           message: "Added to approval list",
         } as const
-        
       } catch (error) {
         throw new TRPCError({
           code: "BAD_REQUEST",
