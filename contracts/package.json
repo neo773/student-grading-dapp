@@ -1,7 +1,7 @@
 {
-  "name": "altdex-contracts",
+  "name": "student-dapp-contracts",
   "version": "1.0.0",
-  "description": "AltDex Smart Contracts",
+  "description": "Student Dapp Smart Contracts",
   "main": "index.js",
   "scripts": {
     "generate-contract-ts": "bash ./scripts/generate-contract-ts.sh",
@@ -10,7 +10,7 @@
     "deploy-testnet": "hardhat deploy --network testnet",
     "deploy-mainnet": "hardhat deploy --network mainnet"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.7.2",
     "@types/mocha": "^9.1.1",

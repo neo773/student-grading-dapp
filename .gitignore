@@ -164,5 +164,3 @@ contracts/abi/*
 contracts/cache/*
 contracts/deployments/*
 contracts/artifacts/**/*
-bun.lockb
-pnpm-lock.yaml
