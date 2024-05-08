@@ -1,8 +1,8 @@
-import MainContractABI from "../../../contracts/abi/ResultDapp.json"
-import { ContractContext as MainContextEthers } from "../../../contracts/contract-types/ethers/ResultDapp"
-import { ContractContext as MainContext } from "../../../contracts/contract-types/web3/ResultDapp"
+import MainContractABI from "contracts/abi/ResultDapp.json"
+import { ContractContext as MainContextEthers } from "contracts/contract-types/ethers/ResultDapp"
+import { ContractContext as MainContext } from "contracts/contract-types/web3/ResultDapp"
 import Web3 from "web3"
-import { AbiItem } from 'web3-utils';
+import { AbiItem } from 'web3-utils/types/index';
 
 import { ContractInterface, ethers, providers } from 'ethers'
 
@@ -14,13 +14,13 @@ type AvailableContracts = 'MainContract'
  returns BigNumber objects instead of strings, causing potential issues.
  */
 export const useContractEthers = (contractName: AvailableContracts, contractAddress: string) => {
-    const getContract = <T>(contractABI: unknown, contractAddress: string) => {
+    const getContract = <T>(contractABI: ContractInterface, contractAddress: string) => {
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum as providers.ExternalProvider);
         const web3Signer = web3Provider.getSigner()
 
         const Contract = new ethers.Contract(
             contractAddress,
-            contractABI as ContractInterface,
+            contractABI,
             web3Signer
         ) as unknown as T
         return Contract
@@ -41,11 +41,11 @@ export const useContractEthers = (contractName: AvailableContracts, contractAddr
 
 const useContract = (contractName: AvailableContracts, contractAddress: string) => {
 
-    const getContract = <T>(contractABI: unknown, contractAddress: string) => {
+    const getContract = <T>(contractABI: AbiItem, contractAddress: string) => {
         const web3 = new Web3(window.ethereum)
 
         const Contract = new web3.eth.Contract(
-            contractABI as AbiItem,
+            contractABI,
             contractAddress
         ) as unknown as T
 
@@ -56,7 +56,7 @@ const useContract = (contractName: AvailableContracts, contractAddress: string) 
 
         case "MainContract": {
             const Contract = getContract<MainContext>(
-                MainContractABI.abi,
+                MainContractABI.abi as unknown as AbiItem,
                 contractAddress
             )
             return Contract

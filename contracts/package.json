@@ -1,8 +1,12 @@
 {
-  "name": "student-dapp-contracts",
+  "name": "contracts",
   "version": "1.0.0",
   "description": "Student Dapp Smart Contracts",
   "main": "index.js",
+  "files": [
+    "abi",
+    "contract-types"
+  ],
   "scripts": {
     "generate-contract-ts": "bash ./scripts/generate-contract-ts.sh",
     "test": "vitest",
