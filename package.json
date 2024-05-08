@@ -2,6 +2,9 @@
   "name": "student-grading-dapp",
   "version": "1.0.0",
   "description": "Student Grading Dapp",
+  "scripts": {
+    "build": "pnpm run build --filter client"
+  },
   "keywords": [],
   "author": "neo773",
   "license": "MIT"
