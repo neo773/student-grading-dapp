@@ -160,7 +160,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-contracts/abi/*
 contracts/cache/*
 contracts/deployments/*
 contracts/artifacts/**/*
