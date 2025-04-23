@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import { useImmer } from "use-immer"
 import useContract from "../hooks/useContract"
 
-import ipfsClient from "ipfs-http-client"
 import useIPFS from "../hooks/useIPFS"
 import { ResultBatch } from "../types/types"
 import { printDocument } from "../utils/utils"
