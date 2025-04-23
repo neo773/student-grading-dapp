@@ -80,7 +80,7 @@ const Home = () => {
           <div className=" w-6/12">
             <div className="aspect-w-16 aspect-h-9">
               <iframe
-                src="https://www.youtube.com/embed/CDQX8inMCt0"
+                src="https://www.youtube.com/embed/CfTiNqL3aBs"
                 frameBorder="0"
                 className="rounded-md "
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
