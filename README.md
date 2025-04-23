@@ -46,6 +46,7 @@ https://user-images.githubusercontent.com/62795688/235324376-3627efa2-05bd-4fa2-
 - tRPC
 - NextJS
 - Solidity
+- IPFS (self-hosted via Docker)
 
 ## Prerequisites 🔑
 
@@ -53,7 +54,7 @@ Before getting started with Result Dapp, you need to have the following:
 
 - **BscScan Testnet API Key:** You can obtain a BscScan Testnet API Key by creating an account on [BscScan](https://testnet.bscscan.com/), and then generating an API Key from the API Dashboard.
 
-- **Infura.io API Key for IPFS Instance:** You can obtain an Infura.io API Key by creating an account on [Infura.io](https://infura.io/), and then creating a new project to get an API Key.
+- **Docker:** You need Docker installed to run a self-hosted IPFS node for file storage.
 
 - **Wallet Private Key:** You will also need a Wallet Private Key to deploy the contracts and interact with the blockchain. Make sure to keep your Wallet Private Key secure and never share it with anyone.
 
@@ -71,7 +72,14 @@ Rename the file named `.env.development.sample` to `.env.development` and the fi
 <br>
 Replace the placeholder keys in these files with the keys obtained during the prerequisites step.
 
-3. **Set up smart contract**.
+3. **Set up IPFS with Docker**.
+```bash
+# Run the IPFS setup script
+chmod +x setup-ipfs.sh
+./setup-ipfs.sh
+```
+
+4. **Set up smart contract**.
 ```bash
 cd contracts/
 npm install
@@ -80,7 +88,7 @@ npm run generate-contract-ts
 npm run deploy-testnet
 ```
 
-4. Run the application.
+5. Run the application.
 ```bash
 cd client/
 npm install
@@ -93,6 +101,7 @@ npm run dev
 - `build-contracts`: Builds the contracts using Waffle.
 - `deploy-testnet`: Deploys the contracts to the testnet using Hardhat.
 - `deploy-mainnet`: Deploys the contracts to the mainnet using Hardhat.
+- `setup-ipfs.sh`: Sets up a self-hosted IPFS node with Docker.
 
 
 ## License 🔑
